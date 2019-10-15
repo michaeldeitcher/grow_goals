@@ -17,9 +17,10 @@ class Game
 
     while @plant.health.alive? && !@plant.acheived_growth_goal?
       @days += 1
+      putmarkdown "#Day #{@days}"
       putmarkdown @plant.health
       self.prompt_for_daily_dosage
-      @plant.process_day @dosage[:hours], 0, 0
+      @plant.process_day @dosage[:hours], @dosage[:nutrient], @dosage[:water]
     end
 
     if @plant.acheived_growth_goal?
@@ -29,12 +30,19 @@ class Game
     unless @plant.health.alive?
       putmarkdown "#Your plant is dead at #{@days} days."
     end
+    @plant.health.alive?
   end
 
   def prompt_for_daily_dosage
     prompt = TTY::Prompt.new
-    @dosage ||= {hours: 0}
+    @dosage ||= {hours: 0, nutrient: 0, water: 0}
+
     @dosage[:hours] = prompt.slider 'Light', max: 24, format: "|:slider| %d Hours", default: @dosage[:hours]
+
+    @dosage[:nutrient] = prompt.slider 'Nutrient', max: 10, format: "|:slider| %d Units", default: @dosage[:nutrient]
+
+    @dosage[:water] = prompt.slider 'Water', max: 8, format: "|:slider| %d Oz", default: @dosage[:water]
+
     @dosage
   end
 end

@@ -4,21 +4,21 @@ class PlantHealth
   def initialize
     @light_protection = 10
     @nutrient_protection = 10
-    @nutrients = 13
+    @nutrients = 2
     @water_protection = 10
     @height = 0
   end
 
   def to_s
     %Q(
-Height: #{@height.truncate 2}
-Nutrients: #{@nutrients}
-Light protection: #{@light_protection}
+|Height|Nutrients|Nutrient protection|Light protection|
+|------|---------|-------------------|----------------|
+|#{@height.truncate 2}|#{@nutrients}|#{@nutrient_protection}|#{@light_protection}|
 )
   end
 
   def alive?
-    @light_protection > 0 && @nutrients > 0
+    @light_protection > 0 && @nutrients > 0 && @nutrient_protection > 0
   end
 
 end
@@ -29,6 +29,7 @@ class Plant
   def initialize
     @health = PlantHealth.new
     @light_threshold = 0
+    @nutrient_threshold = 5
     @growth_scalers = {
         light: 0.1,
         nutrient: 0.1,
@@ -44,11 +45,23 @@ class Plant
       @health.light_protection -= (light_hours - @light_threshold)
     end
 
+    if @nutrient_threshold < nutrients
+      @health.nutrient_protection -= (nutrients - @nutrient_threshold)
+    end
+
     return unless @health.alive?
+
+    #replenishment
+    if @nutrient_threshold < nutrients
+      @health.nutrients = @nutrient_threshold
+    else
+      @health.nutrients += nutrients
+    end
 
     #growth
     potential_growth = @growth_scalers[:light] * light_hours
     potential_growth *= @growth_scalers[:nutrient] * @health.nutrients
+    potential_growth *= @growth_scalers[:water] * water
     @health.height += potential_growth
 
     #depletion

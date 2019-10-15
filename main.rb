@@ -5,7 +5,7 @@ require "./game.rb"
 prompt = TTY::Prompt.new
 
 welcome_str = %Q(
-##Welcome to Grow Goals
+#Welcome to Grow Goals
 Find your plant's happy ratio to achieve your grow goals.
 
 )
