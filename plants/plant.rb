@@ -11,14 +11,14 @@ class PlantHealth
 
   def to_s
     %Q(
-|Height|Nutrients|Nutrient protection|Light protection|
-|------|---------|-------------------|----------------|
-|#{@height.truncate 2}|#{@nutrients}|#{@nutrient_protection}|#{@light_protection}|
+|Height|Nutrients|Nutrient protection|Light protection|Water protection|
+|------|---------|-------------------|----------------|----------------|
+|#{@height.truncate 2}|#{@nutrients}|#{@nutrient_protection}|#{@light_protection}|#{@water_protection}|
 )
   end
 
   def alive?
-    @light_protection > 0 && @nutrients > 0 && @nutrient_protection > 0
+    @light_protection > 0 && @nutrients > 0 && @nutrient_protection > 0 && @water_protection > 0
   end
 
 end
@@ -30,6 +30,7 @@ class Plant
     @health = PlantHealth.new
     @light_threshold = 0
     @nutrient_threshold = 5
+    @water_threshold = 4
     @growth_scalers = {
         light: 0.1,
         nutrient: 0.1,
@@ -47,6 +48,10 @@ class Plant
 
     if @nutrient_threshold < nutrients
       @health.nutrient_protection -= (nutrients - @nutrient_threshold)
+    end
+
+    if @water_threshold < water
+      @health.water_protection -= (water - @water_threshold)
     end
 
     return unless @health.alive?

@@ -7,14 +7,43 @@ def putmarkdown s
 end
 
 class Game
+  @@plants = [Hibiscus, SpiderPlant]
+
+  def initialize
+    @current_plant_index = 0
+  end
+
+  def play
+    @@plants.each {|plant| play_level plant}
+  end
+
+  def initial_plant
+    @@plants[@current_plant_index]
+  end
+
+  def play_level plant_class
+    current_plant = @@plants[@current_plant_index]
+    plant_growth_achieved = false
+    while !plant_growth_achieved
+      plant_growth_achieved = Level.new.play current_plant
+      break unless TTY::Prompt.new.yes?('Would you like to try again?') unless plant_growth_achieved
+    end
+    # TODO - stop game if No
+    @current_plant_index += 1
+    @@plants[@current_plant_index]
+  end
+end
+
+class Level
   def initialize
     @days = 0
     @dosage = nil
   end
 
-  def play
-    @plant = Hibiscus.new
+  def play plant_class
+    @plant = plant_class.new
 
+    # Day loop
     while @plant.health.alive? && !@plant.acheived_growth_goal?
       @days += 1
       putmarkdown "#Day #{@days}"
