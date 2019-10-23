@@ -24,7 +24,7 @@ class PlantHealth
 end
 
 class Plant
-  attr_reader :health, :species, :success
+  attr_reader :health, :species, :success, :status
 
   def initialize
     @health = PlantHealth.new
@@ -38,9 +38,12 @@ class Plant
     }
     @growth_goal = 10
     @nutrient_depletion_per_day = 1
+    @status = ""
   end
 
   def process_day light_hours=0, nutrients=0, water=0
+    before_health = @health.dup
+
     #protection
     if @light_threshold < light_hours
       @health.light_protection -= (light_hours - @light_threshold)
@@ -72,6 +75,24 @@ class Plant
     #depletion
     @health.nutrients -= @nutrient_depletion_per_day
     @health.nutrients = 0 if @health.nutrients < 0
+
+    update_status before_health
+  end
+
+  def update_status before_health
+    @status = ""
+    growth = @health.height - before_health.height
+    if growth > 0
+      @status += "Plant has achieved #{@health.height.truncate 2} growth.\n"
+    end
+    light_damage = before_health.light_protection - @health.light_protection
+    if light_damage > 0
+      @status += "The leaves are getting yellow\n"
+    end
+    nutrient_damage = before_health.nutrient_protection - @health.nutrient_protection
+    if nutrient_damage > 0
+      @status += "The leaves are getting yellow\n"
+    end
   end
 
   def acheived_growth_goal?

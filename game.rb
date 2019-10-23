@@ -7,7 +7,7 @@ def putmarkdown s
 end
 
 class Game
-  @@plants = [Hibiscus, SpiderPlant]
+  @@plants = [Hibiscus, SpiderPlant, EnglishIvy]
 
   def initialize
     @current_plant_index = 0
@@ -49,9 +49,11 @@ Plant Species: #{@plant.species}
     while @plant.health.alive? && !@plant.acheived_growth_goal?
       @days += 1
       putmarkdown "#Day #{@days}"
-      putmarkdown @plant.health
       self.prompt_for_daily_dosage
       @plant.process_day @dosage[:hours], @dosage[:nutrient], @dosage[:water]
+      putmarkdown @plant.status
+
+      putmarkdown @plant.health
     end
 
     if @plant.acheived_growth_goal?
