@@ -1,5 +1,5 @@
 # Plant Nurturer Grow Challenge
-Feed, Light, and Water your challenge plant to achieve the fastest growth. Be rewarded by you vibrant and abundant plants.
+Feed, Light, and Water your challenge plant to achieve the fastest growth. Be rewarded by your vibrant and abundant plants.
 
 ## To Play
 1. Clone or download this project.
