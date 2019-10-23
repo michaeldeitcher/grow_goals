@@ -3,17 +3,22 @@ require "tty-prompt"
 require "./game.rb"
 
 welcome_str = %Q(
-#Welcome to Grow Goals
-Find your plant's happy ratio to achieve your grow goals.
+#Welcome to Plant Nurturer
+Feed, Light, and Water your challenge plant to achieve it's fastest growth.
 
 )
 
+puts `clear`
 puts TTY::Markdown.parse(welcome_str)
 
-game_won = false
-game = Game.new
-current_plant = game.initial_plant
+begin
+  game_won = false
+  game = Game.new
+  current_plant = game.initial_plant
 
-while current_plant
-  current_plant = game.play_level current_plant
+  while current_plant
+    current_plant = game.play_level current_plant
+  end
+rescue TTY::Reader::InputInterrupt
+  puts ''
 end

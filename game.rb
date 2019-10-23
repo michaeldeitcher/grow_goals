@@ -13,10 +13,6 @@ class Game
     @current_plant_index = 0
   end
 
-  def play
-    @@plants.each {|plant| play_level plant}
-  end
-
   def initial_plant
     @@plants[@current_plant_index]
   end
@@ -43,6 +39,12 @@ class Level
   def play plant_class
     @plant = plant_class.new
 
+    putmarkdown %Q(
+# Plant Nurturer Grow Challenge
+Plant Species: #{@plant.species}
+
+)
+
     # Day loop
     while @plant.health.alive? && !@plant.acheived_growth_goal?
       @days += 1
@@ -53,7 +55,7 @@ class Level
     end
 
     if @plant.acheived_growth_goal?
-      putmarkdown "#You have acheived your growth goal in #{@days} days."
+      putmarkdown "**Congrats! After #{@days} days, your #{@plant.species} has #{@plant.success}**"
     end
 
     unless @plant.health.alive?

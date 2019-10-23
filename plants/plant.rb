@@ -24,7 +24,7 @@ class PlantHealth
 end
 
 class Plant
-  attr_reader :health
+  attr_reader :health, :species, :success
 
   def initialize
     @health = PlantHealth.new
@@ -32,9 +32,9 @@ class Plant
     @nutrient_threshold = 5
     @water_threshold = 4
     @growth_scalers = {
-        light: 0.1,
+        light: 0.3,
         nutrient: 0.1,
-        water: 0.1
+        water: 0.2
     }
     @growth_goal = 10
     @nutrient_depletion_per_day = 1
@@ -84,7 +84,10 @@ class EnglishIvy < Plant
   def initialize
     super
     @light_threshold = 3
+    @species = "Hedera helix English ivy, European ivy, or just ivy"
+    @success = "bloomed with an abundance of beautiful purple flowers."
   end
+
 end
 
 
@@ -93,6 +96,8 @@ class SpiderPlant < Plant
   def initialize
     super
     @light_threshold = 8
+    @species = "Chlorophytum comosum - Spider Plant"
+    @success = "produced a luscious crown of voluminous foliage."
   end
 end
 
@@ -101,5 +106,7 @@ class Hibiscus < Plant
   def initialize
     super
     @light_threshold = 18
+    @species = "Hibiscus syriacus - Common Garden Hibiscus"
+    @success = "bloomed a vibrant yellow flower."
   end
 end
